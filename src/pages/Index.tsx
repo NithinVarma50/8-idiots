@@ -25,7 +25,7 @@ const Index = () => {
           The cosmos is within us. We are made of star-stuff. We are a way for the universe to know itself.
         </h1>
         <p className="mt-4 md:mt-6 text-foreground/80 text-center font-instrument-serif text-base md:text-xl">
-          Kovidh • Pranieth • Manoritha • Bhindu
+          Kovidh • Pranieth • Manoritha • Bindhu
         </p>
         <p className="mt-1 md:mt-2 text-foreground/80 text-center font-instrument-serif text-base md:text-xl">
           Philip • Tanmayi • Ashritha • Nithin
