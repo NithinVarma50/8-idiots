@@ -199,6 +199,15 @@ function GalleryScene({
 
 	const textures = useTexture(normalizedImages.map((img) => img.src));
 
+	const [isMobile, setIsMobile] = useState(false);
+
+	useEffect(() => {
+		const checkMobile = () => setIsMobile(window.innerWidth < 768);
+		checkMobile();
+		window.addEventListener('resize', checkMobile);
+		return () => window.removeEventListener('resize', checkMobile);
+	}, []);
+
 	const materials = useMemo(
 		() => Array.from({ length: visibleCount }, () => createClothMaterial()),
 		[visibleCount]
@@ -206,8 +215,8 @@ function GalleryScene({
 
 	const spatialPositions = useMemo(() => {
 		const positions: { x: number; y: number }[] = [];
-		const maxHorizontalOffset = MAX_HORIZONTAL_OFFSET;
-		const maxVerticalOffset = MAX_VERTICAL_OFFSET;
+		const maxHorizontalOffset = isMobile ? 3 : MAX_HORIZONTAL_OFFSET;
+		const maxVerticalOffset = isMobile ? 4 : MAX_VERTICAL_OFFSET;
 
 		for (let i = 0; i < visibleCount; i++) {
 			const horizontalAngle = (i * 2.618) % (Math.PI * 2);
@@ -226,7 +235,7 @@ function GalleryScene({
 		}
 
 		return positions;
-	}, [visibleCount]);
+	}, [visibleCount, isMobile]);
 
 	const totalImages = normalizedImages.length;
 	const depthRange = DEFAULT_DEPTH_RANGE;
@@ -449,8 +458,10 @@ function GalleryScene({
 				const aspect = textureImage
 					? textureImage.width / textureImage.height
 					: 1;
+
+				const baseScale = isMobile ? 1.5 : 3;
 				const scale: [number, number, number] =
-					aspect > 1 ? [3 * aspect, 3, 1] : [3, 3 / aspect, 1];
+					aspect > 1 ? [baseScale * aspect, baseScale, 1] : [baseScale, baseScale / aspect, 1];
 
 				return (
 					<ImagePlane
