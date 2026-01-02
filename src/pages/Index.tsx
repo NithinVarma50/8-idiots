@@ -59,12 +59,6 @@ const Index = () => {
         <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
       </Canvas>
 
-      {/* Subtle attribution */}
-      <div className="fixed bottom-6 left-0 right-0 z-10 text-center pointer-events-none">
-        <p className="text-muted-foreground text-sm font-instrument-serif italic">
-          — Carl Sagan
-        </p>
-      </div>
     </div>
   )
 }
