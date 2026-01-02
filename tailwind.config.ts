@@ -57,6 +57,14 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        cosmos: {
+          glow: "hsl(var(--cosmos-glow))",
+          particle: "hsl(var(--cosmos-particle))",
+          deep: "hsl(var(--cosmos-deep))",
+        },
+      },
+      fontFamily: {
+        "instrument-serif": ["'Instrument Serif'", "serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
