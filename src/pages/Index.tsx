@@ -2,6 +2,8 @@ import { Canvas } from "@react-three/fiber"
 import { OrbitControls } from "@react-three/drei"
 import { ParticleSphere } from "@/components/ui/cosmos-3d-orbit-gallery"
 import { Suspense } from "react"
+import { Link } from "react-router-dom"
+import { ArrowRight } from "lucide-react"
 
 const pexelsImages = [
   "https://images.pexels.com/photos/1169754/pexels-photo-1169754.jpeg?auto=compress&cs=tinysrgb&w=800",
@@ -57,6 +59,15 @@ const Index = () => {
           These are just moments. But they meant more than we knew then.
         </p>
       </div>
+
+      {/* Next button */}
+      <Link
+        to="/gallery"
+        className="fixed bottom-8 right-8 z-20 flex items-center gap-2 px-6 py-3 bg-foreground/10 backdrop-blur-sm border border-foreground/20 rounded-full text-foreground hover:bg-foreground/20 transition-colors font-instrument-serif text-lg"
+      >
+        Next
+        <ArrowRight className="w-5 h-5" />
+      </Link>
 
       {/* 3D Canvas */}
       <Canvas camera={{ position: [-10, 1.5, 10], fov: 50 }}>
