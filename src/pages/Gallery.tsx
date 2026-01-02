@@ -2,7 +2,7 @@ import InfiniteGallery from "@/components/ui/3d-gallery-photography";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
-const sampleImages = Array.from({ length: 46 }, (_, i) => ({
+const sampleImages = Array.from({ length: 45 }, (_, i) => ({
   src: `/gallery-images/img-${(i + 1).toString().padStart(2, '0')}.jpg`,
   alt: `Gallery Image ${i + 1}`
 }));
