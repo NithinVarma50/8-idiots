@@ -103,7 +103,7 @@ export function ParticleSphere({ images }: ParticleSphereProps) {
       ))}
 
       {orbitingImages.map((image, index) => (
-        <mesh key={`image-${index}`} position={image.position} rotation={image.rotation}>
+        <mesh key={`image-${index}`} position={image.position} rotation={image.rotation} scale={[-1, 1, 1]}>
           <planeGeometry args={[IMAGE_SIZE, IMAGE_SIZE]} />
           <meshBasicMaterial map={textureArray[image.textureIndex]} opacity={1} side={THREE.DoubleSide} />
         </mesh>
