@@ -5,7 +5,7 @@ import { Suspense } from "react"
 import { Link } from "react-router-dom"
 import { ArrowRight } from "lucide-react"
 
-const pexelsImages = Array.from({ length: 45 }, (_, i) => `/gallery-images/img-${(i + 1).toString().padStart(2, '0')}.jpg`)
+const pexelsImages = Array.from({ length: 15 }, (_, i) => `/gallery-images/img-${(i + 1).toString().padStart(2, '0')}.jpg`)
 
 function LoadingFallback() {
   return (

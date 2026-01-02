@@ -450,7 +450,7 @@ function GalleryScene({
 					? textureImage.width / textureImage.height
 					: 1;
 				const scale: [number, number, number] =
-					aspect > 1 ? [2 * aspect, 2, 1] : [2, 2 / aspect, 1];
+					aspect > 1 ? [3 * aspect, 3, 1] : [3, 3 / aspect, 1];
 
 				return (
 					<ImagePlane
@@ -497,13 +497,13 @@ export default function InfiniteGallery({
 	className = 'h-96 w-full',
 	style,
 	fadeSettings = {
-		fadeIn: { start: 0.05, end: 0.25 },
-		fadeOut: { start: 0.4, end: 0.43 },
+		fadeIn: { start: 0.05, end: 0.2 },
+		fadeOut: { start: 0.7, end: 0.8 },
 	},
 	blurSettings = {
 		blurIn: { start: 0.0, end: 0.1 },
-		blurOut: { start: 0.4, end: 0.43 },
-		maxBlur: 8.0,
+		blurOut: { start: 0.7, end: 0.8 },
+		maxBlur: 4.0,
 	},
 }: InfiniteGalleryProps) {
 	const [webglSupported, setWebglSupported] = useState(true);
