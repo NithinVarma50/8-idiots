@@ -47,6 +47,12 @@ const Index = () => {
         <h1 className="max-w-[750px] mx-auto text-foreground text-center font-instrument-serif px-6 md:text-6xl text-4xl text-balance tracking-tight font-normal leading-tight">
           The cosmos is within us. We are made of star-stuff. We are a way for the universe to know itself.
         </h1>
+        <p className="mt-6 text-foreground/80 text-center font-instrument-serif text-lg md:text-xl">
+          Kovidh • Pranieth • Manoritha • Bhindu
+        </p>
+        <p className="mt-2 text-foreground/80 text-center font-instrument-serif text-lg md:text-xl">
+          Philip • Tanmayi • Ashritha • Nithin
+        </p>
       </div>
 
       {/* 3D Canvas */}
