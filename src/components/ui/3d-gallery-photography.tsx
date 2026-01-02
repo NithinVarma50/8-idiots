@@ -285,12 +285,37 @@ function GalleryScene({
 			canvas.addEventListener('wheel', handleWheel, { passive: false });
 			document.addEventListener('keydown', handleKeyDown);
 
+			// Touch support
+			let touchStartY = 0;
+			let touchStartX = 0;
+			const handleTouchStart = (e: TouchEvent) => {
+				touchStartY = e.touches[0].clientY;
+				touchStartX = e.touches[0].clientX;
+				setAutoPlay(false);
+				lastInteraction.current = Date.now();
+			};
+			const handleTouchMove = (e: TouchEvent) => {
+				const touchY = e.touches[0].clientY;
+				const deltaY = touchStartY - touchY;
+				// Using X delta too for horizontal swipe if preferred, but vertical scroll seems to be the main mechanism
+				// Let's use simple vertical scroll emulation
+				setScrollVelocity((prev) => prev + deltaY * 0.05 * speed);
+				touchStartY = touchY;
+				e.preventDefault(); // Prevent default scroll
+			};
+
+			canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+			canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+
 			return () => {
 				canvas.removeEventListener('wheel', handleWheel);
 				document.removeEventListener('keydown', handleKeyDown);
+				canvas.removeEventListener('touchstart', handleTouchStart);
+				canvas.removeEventListener('touchmove', handleTouchMove);
 			};
 		}
-	}, [handleWheel, handleKeyDown]);
+	}, [handleWheel, handleKeyDown, speed]);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -505,7 +530,7 @@ export default function InfiniteGallery({
 	}
 
 	return (
-		<div className={className} style={style}>
+		<div className={`${className} touch-none`} style={style}>
 			<Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
 				<GalleryScene
 					images={images}
