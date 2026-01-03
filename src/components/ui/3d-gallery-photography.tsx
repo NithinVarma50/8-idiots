@@ -43,7 +43,7 @@ interface InfiniteGalleryProps {
 	style?: React.CSSProperties;
 }
 
-const DEFAULT_DEPTH_RANGE = 65;
+const DEFAULT_DEPTH_RANGE = 50;
 const MAX_HORIZONTAL_OFFSET = 8;
 const MAX_VERTICAL_OFFSET = 8;
 
@@ -185,7 +185,6 @@ function GalleryScene({
 		maxBlur: 3.0,
 	},
 	isMobile,
-	zSpacing,
 }: Omit<InfiniteGalleryProps, 'className' | 'style'> & { isMobile: boolean }) {
 	const [scrollVelocity, setScrollVelocity] = useState(0);
 	const [autoPlay, setAutoPlay] = useState(true);
@@ -208,8 +207,8 @@ function GalleryScene({
 
 	const spatialPositions = useMemo(() => {
 		const positions: { x: number; y: number }[] = [];
-		const maxHorizontalOffset = isMobile ? 3 : MAX_HORIZONTAL_OFFSET;
-		const maxVerticalOffset = isMobile ? 3 : MAX_VERTICAL_OFFSET;
+		const maxHorizontalOffset = isMobile ? 1.5 : MAX_HORIZONTAL_OFFSET;
+		const maxVerticalOffset = isMobile ? 2 : MAX_VERTICAL_OFFSET;
 
 		for (let i = 0; i < visibleCount; i++) {
 			const horizontalAngle = (i * 2.618) % (Math.PI * 2);
@@ -231,7 +230,7 @@ function GalleryScene({
 	}, [visibleCount, isMobile]);
 
 	const totalImages = normalizedImages.length;
-	const depthRange = zSpacing || DEFAULT_DEPTH_RANGE;
+	const depthRange = DEFAULT_DEPTH_RANGE;
 
 	const planesData = useRef(
 		Array.from({ length: visibleCount }, (_, i) => ({
@@ -509,7 +508,6 @@ export default function InfiniteGallery({
 		blurOut: { start: 0.7, end: 0.8 },
 		maxBlur: 4.0,
 	},
-	zSpacing,
 }: InfiniteGalleryProps) {
 	const [webglSupported, setWebglSupported] = useState(true);
 
@@ -551,7 +549,6 @@ export default function InfiniteGallery({
 					fadeSettings={fadeSettings}
 					blurSettings={blurSettings}
 					isMobile={isMobile}
-					zSpacing={zSpacing}
 				/>
 			</Canvas>
 		</div>
