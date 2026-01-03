@@ -207,33 +207,39 @@ function GalleryScene({
 
 	const spatialPositions = useMemo(() => {
 		const positions: { x: number; y: number }[] = [];
-		const phi = Math.PI * (3 - Math.sqrt(5)); // Golden Angle
 
 		for (let i = 0; i < visibleCount; i++) {
 			if (isMobile) {
-				// Mobile: Tighter horizontal spread, more vertical use
-				// Helix pattern with limited X
-				const angle = i * 2.0; // Predictable rotation
-				const x = Math.sin(angle) * 1.8; // Constrained width (approx +/- 1.8 units)
-				// Vary Y to use vertical space effectively
-				const y = Math.cos(angle * 0.7) * 4.5;
+				// Mobile: Vertical flow, slight zigzag
+				const angle = i * 0.5;
+				const x = Math.sin(angle) * 1.5;
+				const y = Math.cos(angle * 0.8) * 3.0; // Use vertical space
 				positions.push({ x, y });
 			} else {
-				// Desktop: Golden Angle Spiral for even distribution
-				// We vary radius to have inner (center) and outer images
-				const theta = i * phi;
+				// Desktop: Multi-Ring Cloud
+				// Restore original "randomness" feel but controlled
+				const layer = i % 3; // 0=Center, 1=Mid, 2=Outer
+				// Use a non-repeating angle increment to avoid stacking
+				const angle = i * 2.399; // Golden angle-ish approximation
 
-				// Create distinct "lanes" or "shells" to avoid occlusion
-				// i % 3 === 0 puts some images closer to center (tunnel effect)
-				// Others further out
-				const isCenter = i % 4 === 0;
-				const baseRadius = isCenter ? 2.5 : 7.0;
-				// Add some organic variation to radius so it's not perfect rings
-				const radiusVariation = Math.sin(i * 1.5) * 1.0;
-				const radius = baseRadius + radiusVariation;
+				let radius = 0;
+				let yMult = 0.8;
 
-				const x = Math.cos(theta) * radius;
-				const y = Math.sin(theta) * radius * 0.8; // Slightly compressed vertically for 16:9 aspect
+				if (layer === 0) {
+					// Center Layer: Keep them "middle" but not hiding behind each other.
+					// Small radius drift ensures they aren't a perfect line.
+					radius = 1.0 + Math.abs(Math.sin(i * 1.3)) * 2.0;
+					yMult = 0.6; // Keep center tight vertically
+				} else if (layer === 1) {
+					// Mid Layer
+					radius = 4.5 + Math.cos(i * 0.7) * 1.5;
+				} else {
+					// Outer Layer
+					radius = 7.5 + Math.sin(i * 0.4) * 2.0;
+				}
+
+				const x = Math.cos(angle) * radius;
+				const y = Math.sin(angle) * radius * yMult;
 
 				positions.push({ x, y });
 			}
