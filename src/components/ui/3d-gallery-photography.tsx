@@ -185,6 +185,7 @@ function GalleryScene({
 		maxBlur: 3.0,
 	},
 	isMobile,
+	zSpacing,
 }: Omit<InfiniteGalleryProps, 'className' | 'style'> & { isMobile: boolean }) {
 	const [scrollVelocity, setScrollVelocity] = useState(0);
 	const [autoPlay, setAutoPlay] = useState(true);
@@ -508,6 +509,7 @@ export default function InfiniteGallery({
 		blurOut: { start: 0.7, end: 0.8 },
 		maxBlur: 4.0,
 	},
+	zSpacing,
 }: InfiniteGalleryProps) {
 	const [webglSupported, setWebglSupported] = useState(true);
 
@@ -549,6 +551,7 @@ export default function InfiniteGallery({
 					fadeSettings={fadeSettings}
 					blurSettings={blurSettings}
 					isMobile={isMobile}
+					zSpacing={zSpacing}
 				/>
 			</Canvas>
 		</div>
