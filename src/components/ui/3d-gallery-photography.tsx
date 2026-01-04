@@ -207,18 +207,39 @@ function GalleryScene({
 
 	const spatialPositions = useMemo(() => {
 		const positions: { x: number; y: number }[] = [];
-		const maxHorizontalOffset = isMobile ? 1.5 : MAX_HORIZONTAL_OFFSET;
-		const maxVerticalOffset = isMobile ? 2 : MAX_VERTICAL_OFFSET;
+		const maxHorizontalOffset = isMobile ? 0.8 : MAX_HORIZONTAL_OFFSET;
+		const maxVerticalOffset = isMobile ? 1.2 : MAX_VERTICAL_OFFSET;
 
 		for (let i = 0; i < visibleCount; i++) {
 			if (isMobile) {
-				// Mobile: Original random distribution
-				const angle = (i * 137.5 * Math.PI) / 180;
-				const horizontalRadius = 0.3 + (i % 5) * 0.15;
-				const verticalRadius = 0.2 + (i % 4) * 0.2;
+				// Mobile: More centered distribution with tighter spacing
+				const positionType = i % 5; // 0,1 = center, 2 = right, 3 = left, 4 = slight offset
+				let side = 0;
+				let horizontalRadius = 0.1;
+				
+				if (positionType === 0 || positionType === 1) {
+					// Center positions (40% of images)
+					side = 0;
+					horizontalRadius = 0.05 + (i % 3) * 0.03;
+				} else if (positionType === 2) {
+					// Right side
+					side = 1;
+					horizontalRadius = 0.3 + (i % 4) * 0.1;
+				} else if (positionType === 3) {
+					// Left side
+					side = -1;
+					horizontalRadius = 0.3 + (i % 4) * 0.1;
+				} else {
+					// Slight offset
+					side = (i % 2 === 0) ? 0.5 : -0.5;
+					horizontalRadius = 0.15;
+				}
+				
+				const verticalRadius = 0.15 + (i % 4) * 0.12;
+				const verticalDirection = (i % 4) === 0 ? 0 : ((i % 4) === 1 ? 0.6 : ((i % 4) === 2 ? -0.6 : 0.3));
 
-				const x = Math.cos(angle) * horizontalRadius * maxHorizontalOffset;
-				const y = Math.sin(angle) * verticalRadius * maxVerticalOffset;
+				const x = side * horizontalRadius * maxHorizontalOffset;
+				const y = verticalDirection * verticalRadius * maxVerticalOffset;
 
 				positions.push({ x, y });
 			} else {
@@ -463,7 +484,7 @@ function GalleryScene({
 					? textureImage.width / textureImage.height
 					: 1;
 
-				const baseScale = isMobile ? 0.75 : 2.5;
+				const baseScale = isMobile ? 1.4 : 2.5;
 				const scale: [number, number, number] =
 					aspect > 1 ? [baseScale * aspect, baseScale, 1] : [baseScale, baseScale / aspect, 1];
 
