@@ -1,8 +1,7 @@
 "use client"
 
-import { useRef, useMemo } from "react"
+import { useRef, useMemo, useState, useEffect } from "react"
 import { useFrame } from "@react-three/fiber"
-import { useTexture } from "@react-three/drei"
 import * as THREE from "three"
 
 interface ParticleSphereProps {
@@ -23,8 +22,50 @@ export function ParticleSphere({ images }: ParticleSphereProps) {
   const IMAGE_SIZE = 1.5
 
   const groupRef = useRef<THREE.Group>(null)
+  const [textures, setTextures] = useState<THREE.Texture[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const textures = useTexture(images)
+  useEffect(() => {
+    const loader = new THREE.TextureLoader()
+    const loadedTextures: THREE.Texture[] = []
+    let loadedCount = 0
+
+    images.forEach((src, index) => {
+      loader.load(
+        src,
+        (texture) => {
+          loadedTextures[index] = texture
+          loadedCount++
+          if (loadedCount === images.length) {
+            setTextures(loadedTextures)
+            setLoading(false)
+          }
+        },
+        undefined,
+        () => {
+          // On error, create a placeholder texture
+          const canvas = document.createElement('canvas')
+          canvas.width = 64
+          canvas.height = 64
+          const ctx = canvas.getContext('2d')
+          if (ctx) {
+            ctx.fillStyle = '#d4a853'
+            ctx.fillRect(0, 0, 64, 64)
+          }
+          loadedTextures[index] = new THREE.CanvasTexture(canvas)
+          loadedCount++
+          if (loadedCount === images.length) {
+            setTextures(loadedTextures)
+            setLoading(false)
+          }
+        }
+      )
+    })
+
+    return () => {
+      loadedTextures.forEach(t => t?.dispose())
+    }
+  }, [images])
 
   const particles = useMemo(() => {
     const particles = []
@@ -55,8 +96,9 @@ export function ParticleSphere({ images }: ParticleSphereProps) {
   }, [PARTICLE_COUNT, SPHERE_RADIUS, POSITION_RANDOMNESS, PARTICLE_SIZE_MIN, PARTICLE_SIZE_MAX])
 
   const orbitingImages = useMemo(() => {
+    if (loading || textures.length === 0) return []
+    
     const imgs = []
-    const textureArray = Array.isArray(textures) ? textures : [textures]
 
     for (let i = 0; i < IMAGE_COUNT; i++) {
       const angle = (i / IMAGE_COUNT) * Math.PI * 2
@@ -76,13 +118,13 @@ export function ParticleSphere({ images }: ParticleSphereProps) {
       imgs.push({
         position: [x, y, z] as [number, number, number],
         rotation: [euler.x, euler.y, euler.z] as [number, number, number],
-        textureIndex: i % textureArray.length,
+        textureIndex: i % textures.length,
         color: new THREE.Color().setHSL(Math.random(), 0.7, 0.6),
       })
     }
 
     return imgs
-  }, [IMAGE_COUNT, SPHERE_RADIUS, textures])
+  }, [IMAGE_COUNT, SPHERE_RADIUS, textures, loading])
 
   useFrame(() => {
     if (groupRef.current) {
@@ -90,8 +132,6 @@ export function ParticleSphere({ images }: ParticleSphereProps) {
       groupRef.current.rotation.x += ROTATION_SPEED_X
     }
   })
-
-  const textureArray = Array.isArray(textures) ? textures : [textures]
 
   return (
     <group ref={groupRef}>
@@ -105,7 +145,7 @@ export function ParticleSphere({ images }: ParticleSphereProps) {
       {orbitingImages.map((image, index) => (
         <mesh key={`image-${index}`} position={image.position} rotation={image.rotation} scale={[-1, 1, 1]}>
           <planeGeometry args={[IMAGE_SIZE, IMAGE_SIZE]} />
-          <meshBasicMaterial map={textureArray[image.textureIndex]} opacity={1} side={THREE.DoubleSide} />
+          <meshBasicMaterial map={textures[image.textureIndex]} opacity={1} side={THREE.DoubleSide} />
         </mesh>
       ))}
     </group>
