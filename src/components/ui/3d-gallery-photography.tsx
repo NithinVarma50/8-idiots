@@ -211,13 +211,14 @@ function GalleryScene({
 		const maxVerticalOffset = isMobile ? 2 : MAX_VERTICAL_OFFSET;
 
 		for (let i = 0; i < visibleCount; i++) {
-			// Alternate left/right evenly with varying distances
-			const side = i % 2 === 0 ? 1 : -1;
-			const horizontalRadius = 0.4 + ((i % 5) * 0.3);
+			// Distribute: left, center, right pattern
+			const positionType = i % 3; // 0 = center, 1 = right, 2 = left
+			const side = positionType === 0 ? 0 : (positionType === 1 ? 1 : -1);
+			const horizontalRadius = positionType === 0 ? 0.15 : (0.5 + ((i % 5) * 0.25));
 			const verticalRadius = 0.2 + ((i % 4) * 0.25);
 			
-			// Use different vertical positions based on index
-			const verticalDirection = (i % 3) === 0 ? 0 : ((i % 3) === 1 ? 1 : -1);
+			// Vary vertical positions
+			const verticalDirection = (i % 4) === 0 ? 0 : ((i % 4) === 1 ? 1 : ((i % 4) === 2 ? -1 : 0.5));
 
 			const x = side * horizontalRadius * maxHorizontalOffset * 0.5;
 			const y = verticalDirection * verticalRadius * maxVerticalOffset * 0.4;
