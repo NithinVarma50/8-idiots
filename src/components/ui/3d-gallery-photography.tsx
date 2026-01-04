@@ -341,7 +341,7 @@ function GalleryScene({
 
 	useFrame((state, delta) => {
 		if (autoPlay) {
-			setScrollVelocity((prev) => prev + 0.3 * delta);
+			setScrollVelocity((prev) => prev + 0.6 * delta);
 		}
 
 		setScrollVelocity((prev) => prev * 0.95);
